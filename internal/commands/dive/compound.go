@@ -3,16 +3,17 @@ package dive
 import (
 	"github.com/jroimartin/gocui"
 	"github.com/sirupsen/logrus"
+	"github.com/wagoodman/dive/runtime/ui/view"
 	"github.com/wagoodman/dive/utils"
 )
 
 type LayerDetailsCompoundLayout struct {
-	layer               *Layer
-	details             ImageDetails
+	layer               *view.Layer
+	details             *CNBDetails
 	constrainRealEstate bool
 }
 
-func NewLayerDetailsCompoundLayout(layer *Layer, details ImageDetails) *LayerDetailsCompoundLayout {
+func NewLayerDetailsCompoundLayout(layer *view.Layer, details *CNBDetails) *LayerDetailsCompoundLayout {
 	return &LayerDetailsCompoundLayout{
 		layer:   layer,
 		details: details,
@@ -133,3 +134,4 @@ func (cl *LayerDetailsCompoundLayout) RequestedSize(available int) *int {
 func (cl *LayerDetailsCompoundLayout) IsVisible() bool {
 	return true
 }
+

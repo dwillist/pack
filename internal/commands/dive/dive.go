@@ -3,6 +3,9 @@ package dive
 import (
 	"bytes"
 	"fmt"
+	"github.com/sirupsen/logrus"
+	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/jroimartin/gocui"
@@ -15,7 +18,7 @@ import (
 
 var (
 	once         sync.Once
-	appSingleton *App
+	appSingleton *app
 )
 
 // CreateBuilder creates a builder image, based on a builder config
@@ -25,7 +28,15 @@ func Dive(logger logging.Logger, cfg config.Config, client commands.PackClient) 
 		Args:  cobra.ExactArgs(1),
 		Short: "interactive exploration of image",
 		RunE: commands.LogError(logger, func(cmd *cobra.Command, args []string) error {
+			initConfig()
 			imgName := args[0]
+
+			// TODO: deleteme
+			logfile, err := os.Create(filepath.Join("/tmp", "output", "pack.txt"))
+			if err != nil {
+				return err
+			}
+			logrus.SetOutput(logfile)
 
 			logger.Infof("Building structures for %s\n", imgName)
 			diveResult, err := client.Dive(imgName, true)
@@ -33,7 +44,9 @@ func Dive(logger logging.Logger, cfg config.Config, client commands.PackClient) 
 				return err
 			}
 			// create a GUI
+			logger.Info("creating GUI")
 			g, err := gocui.NewGui(gocui.OutputNormal)
+			logger.Info("GUI created!!")
 			if err != nil {
 				return err
 			}
@@ -41,17 +54,18 @@ func Dive(logger logging.Logger, cfg config.Config, client commands.PackClient) 
 
 			logger.Info("starting app!")
 
-			app, err := NewApp(AppOptions{
+			_, err = newApp(AppOptions{
 				DiveResult: diveResult,
 				GUI:        g,
+				//Debug: true, doesn't work currently
 			})
 			if err != nil {
 				panic(err)
 			}
 
-			err = app.Run()
-			if err != nil {
-				panic(err)
+			if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
+				logger.Errorf("main loop error: ", err)
+				return err
 			}
 
 			return nil

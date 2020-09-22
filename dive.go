@@ -26,7 +26,6 @@ type LayerLookup struct {
 type DiveImage struct {
 	Name string
 	*diveimage.Image
-	CNBImage *diveimage.Image
 }
 
 func NewLayerLookup(label lifecycle.LayersMetadata) LayerLookup {

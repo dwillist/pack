@@ -55,4 +55,6 @@ require (
 	gotest.tools/v3 v3.0.2 // indirect
 )
 
+replace github.com/wagoodman/dive => /Users/dan/workspace/VMware/dwillist/dive
+
 go 1.14
