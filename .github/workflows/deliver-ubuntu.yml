@@ -1,19 +1,14 @@
 name: delivery / ubuntu
 
 on:
-  push:
-    branches:
-      - main
-      - ppa_publish
-
-#  release:
-#    types:
-#      - released
-#  workflow_dispatch:
-#    inputs:
-#      tag_name:
-#        description: The release tag to distribute
-#        required: true
+  release:
+    types:
+      - released
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: The release tag to distribute
+        required: true
 
 
 jobs:
