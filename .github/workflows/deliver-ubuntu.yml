@@ -1,17 +1,19 @@
 name: delivery / ubuntu
 
 on:
-  release:
-    types:
-      - released
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: The release tag to distribute
-        required: true
-      ubuntu_ppa:
-        description: flag indicating this is an ubuntu release
-        required: true
+  push:
+    branches:
+      - main
+      - ppa_publish
+
+#  release:
+#    types:
+#      - released
+#  workflow_dispatch:
+#    inputs:
+#      tag_name:
+#        description: The release tag to distribute
+#        required: true
 
 
 jobs:
